@@ -41,14 +41,14 @@ Test mode:
 
 History of test results:
 - is stored in separate file - results.txt
-- date and time are stored
+- date and time are stored also
 
 
 
 # Table of content (optional)
 - file quiz.py
 - file questions.csv
-- test_stats.csv
+- file test_stats.csv
 - results.txt
 - tests (3 unit tests)
 
