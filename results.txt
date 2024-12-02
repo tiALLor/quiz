@@ -1,0 +1,24 @@
+=================
+Test results from testting on: 2024-12-02 20:53:27.539041
+Correct anwers: 1
+from 3 questions
+% of correct answers: 33.33
+=================
+
+
+=================
+Test results from testting on: 2024-12-02 21:23:59.565872
+Correct anwers: 2
+from 3 questions
+% of correct answers: 66.67
+=================
+
+
+=================
+Test results from testting on: 2024-12-02 21:26:29.379954
+Correct anwers: 5
+from 5 questions
+% of correct answers: 100.00
+=================
+
+

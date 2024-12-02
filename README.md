@@ -28,7 +28,7 @@ Question statistics:
 - number of times used
 - percentage of times it was answered correctly
 
-Minimal 5 questions are necessary for run of practice or test mode.
+Minimal 5 questions in database (from which are at least 3 active) are necessary to run a practice or test mode.
 
 Practice mode:
 - questions are shown in endless loop until interrupted by user
