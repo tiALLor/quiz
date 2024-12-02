@@ -72,10 +72,11 @@ class Database_of_questions:
 
     questions: dict[int, Question] = field(default_factory=dict)
 
-    def add_question(self):
+    def add_question(self, id=0):
         print("\nQuestion creation:")
         try:
-            id = (max(self.list_of_ids()) + 1)
+            if id == 0:
+                id = (max(self.list_of_ids()) + 1)
         except ValueError:
             """if database of questions is empty"""
             id = 1
@@ -123,22 +124,26 @@ class Database_of_questions:
                 self.questions[question.id] = question
 
     def store_database_in_csv(self):
-        with open("questions.csv", "w", newline='') as database_file:
-            fieldnames = ["id", "enabled", "question",
-                          "possible_choices", "correct_answer",
-                          "stat_times_used", "stat_correct_answ"]
-            writer = csv.DictWriter(database_file, fieldnames=fieldnames)
-            writer.writeheader()
-            for question in self.questions.values():
-                writer.writerow({
-                    "id": question.id,
-                    "enabled": question.enabled,
-                    "question": question.question,
-                    "possible_choices": ';'.join(question.possible_choices),
-                    "correct_answer": question.correct_answer,
-                    "stat_times_used": question.stat_times_used,
-                    "stat_correct_answ": question.stat_correct_answ
-                })
+        try:
+            with open("questions.csv", "w", newline='') as database_file:
+                fieldnames = ["id", "enabled", "question",
+                            "possible_choices", "correct_answer",
+                            "stat_times_used", "stat_correct_answ"]
+                writer = csv.DictWriter(database_file, fieldnames=fieldnames)
+                writer.writeheader()
+                for question in self.questions.values():
+                    writer.writerow({
+                        "id": question.id,
+                        "enabled": question.enabled,
+                        "question": question.question,
+                        "possible_choices": ';'.join(question.possible_choices),
+                        "correct_answer": question.correct_answer,
+                        "stat_times_used": question.stat_times_used,
+                        "stat_correct_answ": question.stat_correct_answ
+                    })
+        except Exception as e:
+            print(f"Exception {e} occured!")
+        print("Question was succesfully added.\n") 
             
     def summary(self):
         for question in self.questions.values():
@@ -222,18 +227,18 @@ def primary_screen():
             Please choose what you would like to do:
             -------------------------------------------
             1. Add a question
-            2. Question statistics / Show question in database
+            2. Question statistics / Show questions in database
             3. Activate or disable a question from testing
             4. Practice
             5. Testing
-            6. End
+            6. Change a question
+            7. End
             -------------------------------------------
             """)
         mode = input("Please make a choose! ")
         if mode == "1":
             database.add_question()
             database.store_database_in_csv()
-            print("Question was succesfully added.\n")
         elif mode == "2":
             database.summary()
         elif mode == "3":
@@ -244,6 +249,10 @@ def primary_screen():
             if can_be_run() == True:
                 mode_testing()
         elif mode == "6":
+            change_question()
+            database.store_database_in_csv()
+            print("Question was succesfully added.\n")
+        elif mode == "7":
             print("Bye.")
             sys.exit()
         else:
@@ -322,7 +331,7 @@ def mode_testing():
             test_stat_correct += 1
         elif answ_is_correct == False:
             test_stat_incorrect += 1
-
+    database.store_database_in_csv()
     save_print(test_results(test_stat_correct, test_stat_incorrect))
 
 def can_be_run():
@@ -362,7 +371,14 @@ def save_print(test_results):
     except Exception as e:
         print(f"Results were not saved. Error: {e}")
 
-
+def change_question():
+    id_to_change = get_data("Question ID to be changed: ", "int")
+    if id_to_change not in database.list_of_ids():
+        raise ValueError("ID is not valid")
+        return
+    database.add_question(id_to_change)
+    database.store_database_in_csv()
+    return
 
 
 if __name__=="__main__":

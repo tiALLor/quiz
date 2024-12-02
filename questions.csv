@@ -1,7 +1,9 @@
 id,enabled,question,possible_choices,correct_answer,stat_times_used,stat_correct_answ
-1,False,5 + 5 = ?,,10,0,0
-2,True,Which command do you use to rename a file using the command line?,ls;la;mv;rm,mv,0,0
-3,True,Can you access the history of your commands using the command line interface?,"Yes, you can do it by pressing up/down on your keyboard;No, this would be a security risk","Yes, you can do it by pressing up/down on your keyboard",0,0
-4,True,print() function in Python can only take strings as its arguments,True;False,False,0,0
-5,True,"When you're writing a new program with complex logic, it can be useful to:","Write code with functions that you haven't implemented yet, to make your logic flow clearer;Try to write the code extremely carefully so that it immediately represents the final version as much as possible;Write code trying to make sure as much as possible that it succsefully runs the first time you try to run it;None of the above","Write code with functions that you haven't implemented yet, to make your logic flow clearer",0,0
-6,True,"A common thing to use with ""for"" loops is:",range();sort();loop();numbers(),range(),0,0
+1,True,5 + 5 = ?,,10,1,0
+2,True,2 + 2 = ?,,4,0,0
+3,True,Which command do you use to rename a file using the command line?,ls;la;mv;rm,mv,1,1
+4,True,Can you access the history of your commands using the command line interface?,"Yes, you can do it by pressing up/down on your keyboard;No, this would be a security risk","Yes, you can do it by pressing up/down on your keyboard",2,2
+5,True,print() function in Python can only take strings as its arguments,True;False,False,1,1
+6,True,"When you're writing a new program with complex logic, it can be useful to:","Write code with functions that you haven't implemented yet, to make your logic flow clearer;Try to write the code extremely carefully so that it immediately represents the final version as much as possible;Write code trying to make sure as much as possible that it succsefully runs the first time you try to run it;None of the above","Write code with functions that you haven't implemented yet, to make your logic flow clearer",1,1
+7,True,"A common thing to use with """"for"""" loops is:",range();sort();loop();numbers(),range(),1,1
+8,True,1 + 1 = ?,,2,1,1

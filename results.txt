@@ -22,3 +22,19 @@ from 5 questions
 =================
 
 
+=================
+Test results from testting on: 2024-12-02 22:53:52.866223
+Correct anwers: 5
+from 5 questions
+% of correct answers: 100.00
+=================
+
+
+=================
+Test results from testting on: 2024-12-02 22:54:34.197079
+Correct anwers: 2
+from 3 questions
+% of correct answers: 66.67
+=================
+
+
