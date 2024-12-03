@@ -46,3 +46,19 @@ from 5 questions
 =================
 
 
+=================
+Test results from testting on: 2024-12-03 17:02:06.476542
+Correct anwers: 5
+from 5 questions
+% of correct answers: 100.00
+=================
+
+
+=================
+Test results from testting on: 2024-12-03 17:48:14.915048
+Correct anwers: 3
+from 5 questions
+% of correct answers: 60.00
+=================
+
+

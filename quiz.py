@@ -17,14 +17,14 @@ class Question:
     question: str
     possible_choices: list
     correct_answer: str
-    stat_times_used: str = 0
-    stat_correct_answ: str = 0
+    stat_times_used: int = 0
+    stat_correct_answ: int = 0
 
     def ask_question(self, type="fix_possition"):
         print(f"Question: {self.question}")
         if len(self.possible_choices) == 1:
             # change to use of get_data()
-            users_answer = input("Your answer: ")
+            users_answer = get_data("Your answer: ")
         elif len(self.possible_choices) >1:
             choices = self.possible_choices.copy()
             if type == "random_possition":
@@ -152,6 +152,26 @@ class Database_of_questions:
     def list_of_ids(self):
         return self.questions.keys()
     
+    def get_weights_active_q(self):
+        """Calculate weights for random.choices"""
+        weights_active_q = []
+        active_question = self.get_active_questions()
+        for id in active_question:
+            question = self.questions[id]
+            weight = question.stat_correct_answ / self.get_total_time_correct()
+            weights_active_q.append(weight)
+        print(weights_active_q)
+        return weights_active_q
+
+    def get_total_time_correct(self):
+        """Counts how many times where active question used"""
+        total_time_correct = 0
+        active_question = self.get_active_questions()
+        for id in active_question:
+            question = self.questions[id]
+            total_time_correct += question.stat_correct_answ
+        return total_time_correct
+    
     def get_active_questions(self):
         active_questions = []
         for question in self.questions.values():
@@ -245,7 +265,8 @@ def primary_screen():
         elif mode == "3":
             queston_deactivation()
         elif mode == "4":
-            pass
+            if can_be_run() == True:
+                mode_practive()
         elif mode == "5":
             if can_be_run() == True:
                 mode_testing()
@@ -294,7 +315,7 @@ def queston_deactivation():
         return
         
 
-def get_confirmation(question):
+def get_confirmation(question=""):
     print(question)
     while True:
         confirmation = input("Continue? Y/ N ").lower()
@@ -307,6 +328,25 @@ def get_confirmation(question):
         else:
             print("Please answer Y/ N")
 
+def mode_practive():
+    print("Testing mode initialized!\n")
+    active_questions = database.get_active_questions()
+    test_stat_correct = 0
+    test_run_total = 0
+    while True:
+        weights = database.get_weights_active_q()
+        test_question_ids = random.choices(active_questions, weights=weights, k=1)
+        for id in test_question_ids:
+            question = database.questions[id]
+            answ_is_correct = question.ask_question(type="random_possition")
+            if answ_is_correct == True:
+                test_stat_correct += 1
+            test_run_total += 1
+        database.store_database_in_csv()
+        if get_confirmation() == False:
+            break
+    test_results = get_test_results(test_stat_correct, test_run_total)
+    save_print(test_results, save=False)
 
 def mode_testing():
     print("Testing mode initialized!\n")
@@ -325,16 +365,16 @@ def mode_testing():
     random.shuffle(test_question_ids)
 
     test_stat_correct = 0
-    test_stat_incorrect = 0
-    for test_question_id in test_question_ids:
-        question = database.questions[test_question_id]
+    test_run_total = 0
+    for id in test_question_ids:
+        question = database.questions[id]
         answ_is_correct = question.ask_question(type="random_possition")
         if answ_is_correct == True:
             test_stat_correct += 1
-        elif answ_is_correct == False:
-            test_stat_incorrect += 1
+        test_run_total += 1
     database.store_database_in_csv()
-    save_print(test_results(test_stat_correct, test_stat_incorrect))
+    test_results = get_test_results(test_stat_correct, test_run_total)
+    save_print(test_results, save=True)
 
 def can_be_run():
     active_questions = database.get_active_questions()
@@ -347,15 +387,15 @@ def can_be_run():
     else:
         return True
 
-def test_results(test_stat_correct, test_stat_incorrect):
-    total_questions = test_stat_correct + test_stat_incorrect
+def get_test_results(test_stat_correct, test_run_total):
+    test_correct_perc = (test_stat_correct * 100 / test_run_total)
     now = datetime.datetime.today()
     test_report = [
         "=================",
         f"Test results from testting on: {now}",
         f"Correct anwers: {test_stat_correct}",
-        f"from {total_questions} questions",
-        f"% of correct answers: {(test_stat_correct * 100 / total_questions):.2f}",
+        f"from {test_run_total} questions",
+        f"% of correct answers: {test_correct_perc:.2f}",
         "=================",
         "\n",
         ]
@@ -363,12 +403,13 @@ def test_results(test_stat_correct, test_stat_incorrect):
 
     
 
-def save_print(test_results):
+def save_print(test_results, save=True):
     try:
         with open("results.txt", "a") as file:
             for line in test_results:
                 print(line)
-                file.write(f"{line}\n")
+                if save == True:
+                    file.write(f"{line}\n")
 
     except Exception as e:
         print(f"Results were not saved. Error: {e}")
@@ -381,6 +422,7 @@ def change_question():
     database.add_question(id_to_change)
     database.store_database_in_csv()
     return
+
 
 
 if __name__=="__main__":
