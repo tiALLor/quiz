@@ -102,8 +102,8 @@ class Database_of_questions:
     def get_question(self, question_id: int):
         return self.questions.get(question_id)
 
-    def get_database_from_csv(self):
-        with open("questions.csv", mode="r") as database_file:
+    def get_database_from_csv(self, file="questions.csv"):
+        with open(file, mode="r") as database_file:
             reader = csv.DictReader(database_file)
             for row in reader:
                 question = Question(
@@ -117,9 +117,9 @@ class Database_of_questions:
                 )
                 self.questions[question.id] = question
 
-    def store_database_in_csv(self):
+    def store_database_in_csv(self,file="questions.csv"):
         try:
-            with open("questions.csv", "w", newline="") as database_file:
+            with open(file, "w", newline="") as database_file:
                 fieldnames = [
                     "id",
                     "status",
