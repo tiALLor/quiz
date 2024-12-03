@@ -13,7 +13,7 @@ class Question:
     """Question to be used in quiz"""
 
     id: int
-    enabled: bool
+    status: str
     question: str
     possible_choices: list
     correct_answer: str
@@ -43,13 +43,13 @@ class Question:
             return False
     
 
-    def set_enabled(self, value):
-        self.enabled = value
+    def set_status(self, value):
+        self.status = value
 
     def show_question_stats(self):
         print("\n", ("=" * 10))
         print(f"Question ID: {self.id}")
-        print(f"Question Enabled: {self.enabled}")
+        print(f"Question Status: {self.status}")
         print(f"Question: {self.question}\n")
         if len(self.possible_choices) == 1:
             print("Possible choices: None. Free form question")
@@ -80,7 +80,7 @@ class Database_of_questions:
         except ValueError:
             """if database of questions is empty"""
             id = 1
-        enabled = True
+        status = "Enabled"
         the_question = input("Please input the question e.g. '1 + 1 = ?' ")
         print("\nPlease specify the type of quiz question: ")
         print("1 for quiz question with possible choices")
@@ -98,7 +98,7 @@ class Database_of_questions:
                 print("'1' or '2' is expected")
         question = Question(
                         id=id,
-                        enabled=enabled,
+                        status=status,
                         question=the_question,
                         possible_choices=possible_choices,
                         correct_answer=correct_answer
@@ -114,7 +114,7 @@ class Database_of_questions:
             for row in reader:
                 question = Question(
                     id=int(row["id"]),
-                    enabled=bool(row["enabled"]),
+                    status=(row["status"]),
                     question=row["question"],
                     possible_choices=row["possible_choices"].split(';'),
                     correct_answer=row["correct_answer"],
@@ -126,7 +126,7 @@ class Database_of_questions:
     def store_database_in_csv(self):
         try:
             with open("questions.csv", "w", newline='') as database_file:
-                fieldnames = ["id", "enabled", "question",
+                fieldnames = ["id", "status", "question",
                             "possible_choices", "correct_answer",
                             "stat_times_used", "stat_correct_answ"]
                 writer = csv.DictWriter(database_file, fieldnames=fieldnames)
@@ -134,7 +134,7 @@ class Database_of_questions:
                 for question in self.questions.values():
                     writer.writerow({
                         "id": question.id,
-                        "enabled": question.enabled,
+                        "status": question.status,
                         "question": question.question,
                         "possible_choices": ';'.join(question.possible_choices),
                         "correct_answer": question.correct_answer,
@@ -143,7 +143,7 @@ class Database_of_questions:
                     })
         except Exception as e:
             print(f"Exception {e} occured!")
-        print("Question was succesfully added.\n") 
+        print("Database stored in file.\n") 
             
     def summary(self):
         for question in self.questions.values():
@@ -155,7 +155,7 @@ class Database_of_questions:
     def get_active_questions(self):
         active_questions = []
         for question in self.questions.values():
-            if question.enabled == True:
+            if question.status == "Enabled":
                 active_questions.append(question.id)
         return active_questions
     
@@ -239,6 +239,7 @@ def primary_screen():
         if mode == "1":
             database.add_question()
             database.store_database_in_csv()
+            print("Question was succesfully added.\n")
         elif mode == "2":
             database.summary()
         elif mode == "3":
@@ -264,7 +265,7 @@ def queston_deactivation():
     database.summary()
     print("""
           Please provide ID for question,
-          which should be enabled/dissabled,
+          which should be Enabled/ Dissabled,
           from use in tests and practice mode.
           """)
     while True:
@@ -277,15 +278,16 @@ def queston_deactivation():
         except Exception as e:
             print(f"Error {e} occured")
         question = database.questions[int(question_id)]
-        question.show_question_stats()
+        # question.show_question_stats()
         if get_confirmation("You are to change the question status.") == True:
-            if question.enabled == False:
-                question.set_enabled(True)
+            if question.status == "Disabled":
+                question.set_status("Enabled")
                 print("Question was Enabled")
-            elif question.enabled == True:
-                question.set_enabled(False)
+            elif question.status == "Enabled":
+                question.set_status("Disabled")
                 print("Question was Dissabled")
         else:
+            print("A problem occured")
             return
         question.show_question_stats()
         database.store_database_in_csv()

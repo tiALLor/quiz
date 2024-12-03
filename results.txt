@@ -38,3 +38,11 @@ from 3 questions
 =================
 
 
+=================
+Test results from testting on: 2024-12-03 15:52:00.495510
+Correct anwers: 1
+from 5 questions
+% of correct answers: 20.00
+=================
+
+
