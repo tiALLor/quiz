@@ -62,3 +62,11 @@ from 5 questions
 =================
 
 
+=================
+Test results from testting on: 2024-12-03 19:54:23.419456
+Correct anwers: 5
+from 5 questions
+% of correct answers: 100.00
+=================
+
+
