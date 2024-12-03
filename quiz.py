@@ -20,14 +20,14 @@ class Question:
     stat_times_used: int = 0
     stat_correct_answ: int = 0
 
-    def ask_question(self, type="fix_possition"):
+    def ask_question(self, type="fix_position"):
         print(f"Question: {self.question}")
         if len(self.possible_choices) == 1:
             # change to use of get_data()
             users_answer = get_data("Your answer: ")
         elif len(self.possible_choices) >1:
             choices = self.possible_choices.copy()
-            if type == "random_possition":
+            if type == "random_position":
                 random.shuffle(choices)
             displ_choices(choices)
             users_answer = get_from_choices(choices,
@@ -142,7 +142,7 @@ class Database_of_questions:
                         "stat_correct_answ": question.stat_correct_answ
                     })
         except Exception as e:
-            print(f"Exception {e} occured!")
+            print(f"Exception {e} occurred!")
         print("Database stored in file.\n") 
             
     def summary(self):
@@ -233,7 +233,7 @@ def get_data(question, type="str"):
             else:
                 print(f"Please provide a answer!")
         except ValueError:
-            print("Please provide valud number (float or int).")
+            print("Please provide valid number (float or int).")
     
 
 def displ_choices(possible_choices):
@@ -259,21 +259,21 @@ def primary_screen():
         if mode == "1":
             database.add_question()
             database.store_database_in_csv()
-            print("Question was succesfully added.\n")
+            print("Question was successfully added.\n")
         elif mode == "2":
             database.summary()
         elif mode == "3":
-            queston_deactivation()
+            question_deactivation()
         elif mode == "4":
             if can_be_run() == True:
-                mode_practive()
+                mode_practice()
         elif mode == "5":
             if can_be_run() == True:
                 mode_testing()
         elif mode == "6":
             change_question()
             database.store_database_in_csv()
-            print("Question was succesfully added.\n")
+            print("Question was successfully added.\n")
         elif mode == "7":
             print("Bye.")
             sys.exit()
@@ -282,11 +282,11 @@ def primary_screen():
     return
 
 
-def queston_deactivation():
+def question_deactivation():
     database.summary()
     print("""
           Please provide ID for question,
-          which should be Enabled/ Dissabled,
+          which should be Enabled/ Disabled,
           from use in tests and practice mode.
           """)
     while True:
@@ -297,7 +297,7 @@ def queston_deactivation():
             elif int(question_id) not in database.list_of_ids():
                 raise ValueError("ID is not valid")
         except Exception as e:
-            print(f"Error {e} occured")
+            print(f"Error {e} occurred")
         question = database.questions[int(question_id)]
         # question.show_question_stats()
         if get_confirmation("You are to change the question status.") == True:
@@ -306,9 +306,9 @@ def queston_deactivation():
                 print("Question was Enabled")
             elif question.status == "Enabled":
                 question.set_status("Disabled")
-                print("Question was Dissabled")
+                print("Question was Disabled")
         else:
-            print("A problem occured")
+            print("A problem occurred")
             return
         question.show_question_stats()
         database.store_database_in_csv()
@@ -323,12 +323,12 @@ def get_confirmation(question=""):
             print("Confirmed")
             return True
         elif confirmation == "n":
-            print("Canceled")
+            print("Cancelled")
             return False
         else:
             print("Please answer Y/ N")
 
-def mode_practive():
+def mode_practice():
     print("Testing mode initialized!\n")
     active_questions = database.get_active_questions()
     test_stat_correct = 0
@@ -338,7 +338,7 @@ def mode_practive():
         test_question_ids = random.choices(active_questions, weights=weights, k=1)
         for id in test_question_ids:
             question = database.questions[id]
-            answ_is_correct = question.ask_question(type="random_possition")
+            answ_is_correct = question.ask_question(type="random_position")
             if answ_is_correct == True:
                 test_stat_correct += 1
             test_run_total += 1
@@ -368,7 +368,7 @@ def mode_testing():
     test_run_total = 0
     for id in test_question_ids:
         question = database.questions[id]
-        answ_is_correct = question.ask_question(type="random_possition")
+        answ_is_correct = question.ask_question(type="random_position")
         if answ_is_correct == True:
             test_stat_correct += 1
         test_run_total += 1
@@ -433,6 +433,6 @@ if __name__=="__main__":
         print("Database from file was loaded")
     except Exception as e:
         print("Database from file could't be loaded")
-        print(f"Exception: {e} occured!")
+        print(f"Exception: {e} occurred!")
         print("You can continue and create new database!")
     primary_screen()
